@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oussama En-Naji — Designer & Infrastructure</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--o:#E8631A;--b:#1D5FA0;--c:#F5EFE0}
+html,body{height:100%;font-family:'DM Sans',sans-serif;background:#000;overflow-x:hidden}
+
+.hero{position:relative;height:100vh;display:grid;grid-template-columns:1fr 1fr;overflow:hidden}
+
+/* LEFT */
+.side-left{position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:center;padding:80px 52px 120px}
+.paint-bg{position:absolute;inset:0;background:
+  radial-gradient(ellipse 90% 80% at 30% 40%,rgba(29,95,160,.88) 0%,transparent 55%),
+  radial-gradient(ellipse 65% 70% at 75% 18%,rgba(232,99,26,.92) 0%,transparent 50%),
+  radial-gradient(ellipse 70% 60% at 10% 72%,rgba(232,99,26,.72) 0%,transparent 55%),
+  radial-gradient(ellipse 55% 55% at 60% 82%,rgba(29,95,160,.6) 0%,transparent 60%),
+  radial-gradient(ellipse 45% 45% at 85% 50%,rgba(240,160,48,.5) 0%,transparent 50%),
+  #0d1a2e;z-index:0}
+.strokes{position:absolute;inset:0;z-index:1;overflow:hidden}
+.strokes svg{width:100%;height:100%}
+
+/* RIGHT */
+.side-right{position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:center;padding:80px 52px 120px;align-items:flex-end;text-align:right}
+.tech-bg{position:absolute;inset:0;background:
+  radial-gradient(ellipse 70% 60% at 70% 30%,rgba(232,99,26,.52) 0%,transparent 55%),
+  radial-gradient(ellipse 60% 70% at 30% 70%,rgba(180,60,0,.42) 0%,transparent 55%),
+  radial-gradient(ellipse 80% 80% at 90% 85%,rgba(232,99,26,.2) 0%,transparent 60%),
+  #0d0500;z-index:0}
+#netCanvas{position:absolute;inset:0;z-index:1;opacity:.55}
+.code-ov{position:absolute;top:70px;right:24px;z-index:2;font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1.9;color:rgba(232,99,26,.35);text-align:right;pointer-events:none;white-space:pre}
+
+/* 3D CHARACTER */
+.char-zone{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:42%;height:92%;z-index:30}
+#charCanvas{width:100%;height:100%;display:block}
+
+/* DIVIDER */
+.divider{position:absolute;top:0;bottom:80px;left:50%;width:1px;background:linear-gradient(to bottom,transparent,rgba(245,239,224,.25) 30%,rgba(245,239,224,.25) 70%,transparent);z-index:50}
+
+/* CONTENT */
+.side-content{position:relative;z-index:10}
+.role-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(54px,6.5vw,96px);line-height:1;color:#fff;margin-bottom:12px;text-shadow:0 2px 30px rgba(0,0,0,.5)}
+.role-accent{display:block;width:40px;height:3px;background:var(--o);margin-bottom:20px;border-radius:2px}
+.side-right .role-accent{margin-left:auto}
+.role-desc{font-size:14px;font-weight:300;line-height:1.65;color:rgba(245,239,224,.75);max-width:240px;margin-bottom:28px;text-shadow:0 1px 10px rgba(0,0,0,.6)}
+.side-right .role-desc{margin-left:auto}
+
+.skill-list{display:flex;flex-direction:column;gap:12px}
+.skill-item{display:flex;align-items:center;gap:14px;animation:fadeUp .6s both}
+.side-right .skill-item{flex-direction:row-reverse}
+.skill-icon{width:42px;height:42px;border:1px solid rgba(232,99,26,.4);border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(232,99,26,.08);flex-shrink:0;backdrop-filter:blur(4px);transition:all .25s}
+.skill-icon:hover{background:rgba(232,99,26,.2);border-color:rgba(232,99,26,.7);box-shadow:0 0 16px rgba(232,99,26,.3)}
+.skill-icon svg{width:20px;height:20px;stroke:var(--o);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.skill-name{font-size:13.5px;color:rgba(245,239,224,.88);text-shadow:0 1px 8px rgba(0,0,0,.7)}
+
+/* TAGLINE */
+.tagline-bar{position:absolute;bottom:0;left:0;right:0;z-index:60;padding:16px 48px;display:flex;align-items:center;justify-content:center;gap:14px;background:rgba(0,0,0,.65);backdrop-filter:blur(8px);border-top:1px solid rgba(255,255,255,.07);animation:fadeUp .6s .8s both}
+.t-sep{width:1px;height:14px;background:rgba(245,239,224,.3)}
+.t-txt{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3.5px;color:rgba(245,239,224,.55);text-transform:uppercase}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.side-left .side-content{animation:fadeUp .8s .2s both}
+.side-right .side-content{animation:fadeUp .8s .4s both}
+.char-zone{animation:fadeUp 1s .1s both}
+.skill-item:nth-child(1){animation-delay:.5s}
+.skill-item:nth-child(2){animation-delay:.65s}
+.skill-item:nth-child(3){animation-delay:.8s}
+.skill-item:nth-child(4){animation-delay:.95s}
+</style>
+</head>
+<body>
+<section class="hero">
+
+  <!-- LEFT -->
+  <div class="side-left">
+    <div class="paint-bg"></div>
+    <div class="strokes">
+      <svg viewBox="0 0 600 700" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="b1"><feGaussianBlur stdDeviation="20"/></filter>
+          <filter id="b2"><feGaussianBlur stdDeviation="11"/></filter>
+        </defs>
+        <ellipse cx="200" cy="180" rx="185" ry="92" fill="#E8631A" opacity=".55" filter="url(#b1)" transform="rotate(-25 200 180)"/>
+        <ellipse cx="75" cy="340" rx="165" ry="78" fill="#1D5FA0" opacity=".6" filter="url(#b1)" transform="rotate(10 75 340)"/>
+        <ellipse cx="390" cy="115" rx="105" ry="52" fill="#F0A030" opacity=".5" filter="url(#b2)" transform="rotate(-40 390 115)"/>
+        <path d="M95,45 Q118,200 88,382 Q78,452 112,602" stroke="#E8631A" stroke-width="30" fill="none" opacity=".35" filter="url(#b2)" stroke-linecap="round"/>
+        <path d="M258,0 Q298,152 238,302 Q198,402 258,552" stroke="#1D5FA0" stroke-width="22" fill="none" opacity=".3" filter="url(#b2)" stroke-linecap="round"/>
+        <path d="M382,78 Q342,222 382,362 Q402,452 362,582" stroke="#F0A030" stroke-width="16" fill="none" opacity=".28" filter="url(#b2)" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="side-content">
+      <div class="role-title">designer</div>
+      <span class="role-accent"></span>
+      <p class="role-desc">Creative Designer &amp; Freelancer<br>(Illustrator, Photoshop,<br>Print Business)</p>
+      <div class="skill-list">
+        <div class="skill-item">
+          <div class="skill-icon"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+          <span class="skill-name">Branding &amp; Identity</span>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+          <span class="skill-name">Graphic Design</span>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg></div>
+          <span class="skill-name">Illustration &amp; Visual Art</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="side-right">
+    <div class="tech-bg"></div>
+    <canvas id="netCanvas"></canvas>
+    <div class="code-ov"># Configure network
+  interface GigabitEthernet0/1
+  ip address 192.168.1.1 255.255.255.0
+  no shutdown
+
+# System check
+  systemctl status network
+  systemctl status ssh
+
+# Ping gateway
+  ping 8.8.8.8</div>
+    <div class="side-content">
+      <div class="role-title">infrastructure</div>
+      <span class="role-accent"></span>
+      <p class="role-desc">Digital Network &amp; System<br>Infrastructure Specialist<br>(Networks, Systems, Servers,<br>Cloud, Security)</p>
+      <div class="skill-list">
+        <div class="skill-item">
+          <div class="skill-icon"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><path d="M6 6h.01M6 18h.01"/></svg></div>
+          <span class="skill-name">Network Administration</span>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+          <span class="skill-name">System &amp; Server Management</span>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon"><svg viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z"/></svg></div>
+          <span class="skill-name">Cloud &amp; Virtualization</span>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <span class="skill-name">Security &amp; Monitoring</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 3D CHARACTER -->
+  <div class="char-zone">
+    <canvas id="charCanvas"></canvas>
+  </div>
+
+  <!-- TAGLINE -->
+  <div class="tagline-bar">
+    <div class="t-sep"></div>
+    <span class="t-txt">Two Minds</span>
+    <div class="t-sep"></div>
+    <span class="t-txt">One Vision</span>
+    <div class="t-sep"></div>
+    <span class="t-txt">Infinite Possibilities</span>
+    <div class="t-sep"></div>
+  </div>
+
+</section>
+
+<script>
+// ── Network canvas (right bg) ───────────────────────────────
+const nc = document.getElementById('netCanvas');
+const nx = nc.getContext('2d');
+function resizeNet(){nc.width=nc.offsetWidth;nc.height=nc.offsetHeight}
+resizeNet(); window.addEventListener('resize',resizeNet);
+const nNodes=[];
+for(let i=0;i<35;i++) nNodes.push({x:Math.random(),y:Math.random(),vx:(Math.random()-.5)*.0003,vy:(Math.random()-.5)*.0003,r:Math.random()*2+1});
+function drawNet(){
+  const w=nc.width,h=nc.height; nx.clearRect(0,0,w,h);
+  nNodes.forEach(n=>{n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>1)n.vx*=-1;if(n.y<0||n.y>1)n.vy*=-1});
+  for(let i=0;i<nNodes.length;i++) for(let j=i+1;j<nNodes.length;j++){
+    const dx=(nNodes[i].x-nNodes[j].x)*w,dy=(nNodes[i].y-nNodes[j].y)*h,d=Math.sqrt(dx*dx+dy*dy);
+    if(d<160){nx.beginPath();nx.moveTo(nNodes[i].x*w,nNodes[i].y*h);nx.lineTo(nNodes[j].x*w,nNodes[j].y*h);nx.strokeStyle=`rgba(232,99,26,${(1-d/160)*.35})`;nx.lineWidth=.7;nx.stroke()}
+  }
+  nNodes.forEach(n=>{nx.beginPath();nx.arc(n.x*w,n.y*h,n.r,0,Math.PI*2);nx.fillStyle='rgba(232,99,26,.7)';nx.fill()});
+  requestAnimationFrame(drawNet);
+}
+drawNet();
+
+// ── Three.js 3D Character ───────────────────────────────────
+const cc = document.getElementById('charCanvas');
+const cw = cc.parentElement.offsetWidth, ch = cc.parentElement.offsetHeight;
+cc.width = cw; cc.height = ch;
+
+const renderer = new THREE.WebGLRenderer({canvas:cc, alpha:true, antialias:true});
+renderer.setSize(cw, ch);
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.shadowMap.enabled = true;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(50, cw/ch, 0.1, 100);
+camera.position.set(0, 1.2, 5.5);
+
+// Lights
+const ambL = new THREE.AmbientLight(0xffffff, 0.3);
+scene.add(ambL);
+
+const orangeL = new THREE.PointLight(0xE8631A, 3, 12);
+orangeL.position.set(2, 3, 3);
+scene.add(orangeL);
+
+const blueL = new THREE.PointLight(0x1D5FA0, 3, 12);
+blueL.position.set(-2, 3, 3);
+scene.add(blueL);
+
+const topL = new THREE.DirectionalLight(0xffffff, 0.8);
+topL.position.set(0, 5, 5);
+scene.add(topL);
+
+// Rim light from back
+const rimL = new THREE.PointLight(0xE8631A, 2, 10);
+rimL.position.set(0, 2, -3);
+scene.add(rimL);
+
+// Material
+const matBody = new THREE.MeshStandardMaterial({color:0x111111, metalness:0.8, roughness:0.2});
+const matGlow = new THREE.MeshStandardMaterial({color:0xE8631A, metalness:1, roughness:0, emissive:0xE8631A, emissiveIntensity:0.6});
+const matBlue = new THREE.MeshStandardMaterial({color:0x1D5FA0, metalness:1, roughness:0.1, emissive:0x1D5FA0, emissiveIntensity:0.4});
+const matWire = new THREE.MeshStandardMaterial({color:0xE8631A, wireframe:true, emissive:0xE8631A, emissiveIntensity:0.3, transparent:true, opacity:0.6});
+
+// Character group
+const char = new THREE.Group();
+scene.add(char);
+
+function box(w,h,d,mat,x,y,z){
+  const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);
+  m.position.set(x,y,z);
+  m.castShadow=true;
+  return m;
+}
+function cyl(rt,rb,h,mat,x,y,z,rx=0,rz=0){
+  const m=new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,8),mat);
+  m.position.set(x,y,z);
+  m.rotation.x=rx; m.rotation.z=rz;
+  m.castShadow=true;
+  return m;
+}
+function sph(r,mat,x,y,z){
+  const m=new THREE.Mesh(new THREE.SphereGeometry(r,16,16),mat);
+  m.position.set(x,y,z);
+  m.castShadow=true;
+  return m;
+}
+
+// Head
+const head = sph(0.38, matBody, 0, 3.55, 0);
+const headWire = sph(0.39, matWire, 0, 3.55, 0);
+
+// Neck
+const neck = cyl(0.1, 0.12, 0.25, matBody, 0, 3.12, 0);
+
+// Torso
+const torso = box(0.85, 1.1, 0.45, matBody, 0, 2.3, 0);
+// chest detail
+const chest = box(0.5, 0.35, 0.12, matGlow, 0, 2.5, 0.26);
+chest.material = new THREE.MeshStandardMaterial({color:0xE8631A,emissive:0xE8631A,emissiveIntensity:1,metalness:1,roughness:0});
+
+// Shoulders
+const shL = sph(0.2, matBlue, -0.6, 2.8, 0);
+const shR = sph(0.2, matBlue, 0.6, 2.8, 0);
+
+// Upper arms
+const uaL = cyl(0.1, 0.09, 0.6, matBody, -0.72, 2.42, 0, 0, 0.18);
+const uaR = cyl(0.1, 0.09, 0.6, matBody, 0.72, 2.42, 0, 0, -0.18);
+
+// Elbows
+const elL = sph(0.11, matGlow, -0.8, 2.05, 0);
+const elR = sph(0.11, matGlow, 0.8, 2.05, 0);
+
+// Forearms
+const faL = cyl(0.09, 0.07, 0.55, matBody, -0.88, 1.72, 0.1, 0.2, 0.1);
+const faR = cyl(0.09, 0.07, 0.55, matBody, 0.88, 1.72, 0.1, 0.2, -0.1);
+
+// Hands
+const hL = sph(0.1, matGlow, -0.93, 1.42, 0.15);
+const hR = sph(0.1, matGlow, 0.93, 1.42, 0.15);
+
+// Belt / waist
+const belt = box(0.88, 0.1, 0.48, matGlow, 0, 1.73, 0);
+
+// Hips
+const hips = box(0.78, 0.35, 0.42, matBody, 0, 1.55, 0);
+
+// Upper legs
+const ulL = cyl(0.16, 0.14, 0.7, matBody, -0.26, 1.12, 0);
+const ulR = cyl(0.16, 0.14, 0.7, matBody, 0.26, 1.12, 0);
+
+// Knees
+const knL = sph(0.15, matBlue, -0.26, 0.72, 0);
+const knR = sph(0.15, matBlue, 0.26, 0.72, 0);
+
+// Lower legs
+const llL = cyl(0.12, 0.1, 0.68, matBody, -0.26, 0.3, 0);
+const llR = cyl(0.12, 0.1, 0.68, matBody, 0.26, 0.3, 0);
+
+// Feet
+const ftL = box(0.18, 0.1, 0.35, matBody, -0.26, -0.05, 0.08);
+const ftR = box(0.18, 0.1, 0.35, matBody, 0.26, -0.05, 0.08);
+
+// Shoulder pads (armor feel)
+const spL = box(0.28, 0.12, 0.32, matGlow, -0.65, 2.9, 0);
+const spR = box(0.28, 0.12, 0.32, matGlow, 0.65, 2.9, 0);
+spL.material = spR.material = new THREE.MeshStandardMaterial({color:0xE8631A,emissive:0xE8631A,emissiveIntensity:0.7,metalness:1,roughness:0});
+
+// Eyes
+const eyeL = sph(0.05, new THREE.MeshStandardMaterial({color:0x00aaff,emissive:0x00aaff,emissiveIntensity:3}), -0.13, 3.6, 0.35);
+const eyeR = sph(0.05, new THREE.MeshStandardMaterial({color:0x00aaff,emissive:0x00aaff,emissiveIntensity:3}),  0.13, 3.6, 0.35);
+
+// Add all parts
+[head,headWire,neck,torso,chest,shL,shR,uaL,uaR,elL,elR,faL,faR,hL,hR,
+ belt,hips,ulL,ulR,knL,knR,llL,llR,ftL,ftR,spL,spR,eyeL,eyeR].forEach(p=>char.add(p));
+
+// Floating platform / shadow disc
+const platform = new THREE.Mesh(
+  new THREE.CylinderGeometry(0.6,0.7,0.04,32),
+  new THREE.MeshStandardMaterial({color:0xE8631A,emissive:0xE8631A,emissiveIntensity:0.5,metalness:1,roughness:0.1,transparent:true,opacity:0.7})
+);
+platform.position.set(0,-0.12,0);
+char.add(platform);
+
+// Glow ring
+const ring = new THREE.Mesh(
+  new THREE.TorusGeometry(0.75,0.018,8,64),
+  new THREE.MeshStandardMaterial({color:0xE8631A,emissive:0xE8631A,emissiveIntensity:1.5,transparent:true,opacity:0.8})
+);
+ring.rotation.x = Math.PI/2;
+ring.position.y = -0.1;
+char.add(ring);
+
+// Orbit particles
+const partGeo = new THREE.BufferGeometry();
+const partCount = 120;
+const pPos = new Float32Array(partCount*3);
+const pAngles = [];
+const pRadii = [];
+const pSpeeds = [];
+const pHeights = [];
+for(let i=0;i<partCount;i++){
+  const angle = Math.random()*Math.PI*2;
+  const r = 0.9 + Math.random()*0.7;
+  const h = Math.random()*4 - 0.5;
+  pAngles.push(angle); pRadii.push(r); pSpeeds.push((Math.random()-.5)*.02); pHeights.push(h);
+  pPos[i*3]=Math.cos(angle)*r; pPos[i*3+1]=h; pPos[i*3+2]=Math.sin(angle)*r;
+}
+partGeo.setAttribute('position',new THREE.BufferAttribute(pPos,3));
+const partMat = new THREE.PointsMaterial({color:0xE8631A,size:0.04,transparent:true,opacity:0.85,sizeAttenuation:true});
+const particles = new THREE.Points(partGeo,partMat);
+char.add(particles);
+
+// Position character
+char.position.y = -1.0;
+
+// Animate
+let t=0;
+function animate(){
+  requestAnimationFrame(animate);
+  t+=0.016;
+
+  // Float
+  char.position.y = -1.0 + Math.sin(t*0.8)*0.12;
+
+  // Gentle rotation
+  char.rotation.y = Math.sin(t*0.3)*0.25;
+
+  // Arm sway
+  uaL.rotation.z = 0.18 + Math.sin(t*0.8)*0.08;
+  uaR.rotation.z = -0.18 - Math.sin(t*0.8)*0.08;
+
+  // Ring pulse
+  ring.scale.setScalar(1 + Math.sin(t*2)*0.04);
+  ring.material.emissiveIntensity = 1.5 + Math.sin(t*3)*0.5;
+
+  // Orange light orbit
+  orangeL.position.x = Math.cos(t*0.5)*3;
+  orangeL.position.z = Math.sin(t*0.5)*3;
+  blueL.position.x = Math.cos(t*0.5+Math.PI)*3;
+  blueL.position.z = Math.sin(t*0.5+Math.PI)*3;
+
+  // Particles orbit
+  const pPositions = particles.geometry.attributes.position.array;
+  for(let i=0;i<partCount;i++){
+    pAngles[i]+=pSpeeds[i];
+    pPositions[i*3]=Math.cos(pAngles[i])*pRadii[i];
+    pPositions[i*3+2]=Math.sin(pAngles[i])*pRadii[i];
+  }
+  particles.geometry.attributes.position.needsUpdate=true;
+
+  renderer.render(scene,camera);
+}
+animate();
+
+// Resize
+window.addEventListener('resize',()=>{
+  const w=cc.parentElement.offsetWidth, h=cc.parentElement.offsetHeight;
+  renderer.setSize(w,h);
+  camera.aspect=w/h;
+  camera.updateProjectionMatrix();
+});
+</script>
+</body>
+</html>

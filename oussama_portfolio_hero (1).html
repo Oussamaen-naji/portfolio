@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oussama En-Naji — Designer & Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --orange: #E8631A;
+    --blue-dark: #0D1B2E;
+    --amber: #F0A030;
+    --cream: #F5EFE0;
+    --code-bg: #1a0d00;
+  }
+
+  html, body {
+    height: 100%;
+    font-family: 'DM Sans', sans-serif;
+    background: #000;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 3px;
+    color: var(--cream);
+  }
+  .nav-logo span { color: var(--orange); }
+
+  nav ul {
+    display: flex; gap: 36px; list-style: none;
+  }
+  nav ul a {
+    color: rgba(245,239,224,0.6);
+    text-decoration: none;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  nav ul a:hover { color: var(--cream); }
+
+  .nav-socials { display: flex; gap: 18px; }
+  .nav-socials a {
+    color: rgba(245,239,224,0.5);
+    font-size: 13px;
+    text-decoration: none;
+    letter-spacing: 1px;
+    font-family: 'JetBrains Mono', monospace;
+    transition: color 0.2s;
+  }
+  .nav-socials a:hover { color: var(--orange); }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+  }
+
+  /* left – designer side */
+  .side-left {
+    position: relative;
+    background: var(--blue-dark);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 52px 72px;
+    overflow: hidden;
+  }
+
+  .art-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 60% at 40% 30%, rgba(232,99,26,0.35) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 50% at 70% 60%, rgba(240,160,48,0.2) 0%, transparent 60%),
+      radial-gradient(ellipse 80% 80% at 20% 80%, rgba(13,27,46,0.9) 0%, transparent 80%);
+    z-index: 0;
+  }
+
+  /* paint strokes */
+  .paint-strokes {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    overflow: hidden;
+  }
+  .stroke {
+    position: absolute;
+    border-radius: 40% 60% 50% 70%;
+    mix-blend-mode: screen;
+    opacity: 0.45;
+  }
+  .s1 { width: 260px; height: 140px; background: #E8631A; top: 18%; left: 5%; transform: rotate(-20deg); }
+  .s2 { width: 180px; height: 100px; background: #1D5FA0; top: 30%; left: 20%; transform: rotate(15deg); }
+  .s3 { width: 200px; height: 90px; background: #F0A030; top: 45%; left: 3%; transform: rotate(-8deg); }
+  .s4 { width: 140px; height: 80px; background: #E8631A; top: 55%; left: 35%; transform: rotate(25deg); }
+  .s5 { width: 300px; height: 120px; background: #0D1B2E; top: 10%; left: -10%; transform: rotate(5deg); opacity: 0.7; }
+
+  /* right – developer side */
+  .side-right {
+    position: relative;
+    background: var(--code-bg);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 52px 72px;
+    overflow: hidden;
+  }
+
+  .code-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse 60% 60% at 70% 40%, rgba(232,99,26,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 80% 80% at 30% 80%, rgba(26,13,0,0.95) 0%, transparent 80%);
+  }
+
+  .code-rain {
+    position: absolute;
+    top: 0; right: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    padding: 80px 24px 0;
+    overflow: hidden;
+  }
+  .code-rain pre {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    line-height: 1.8;
+    color: rgba(232,99,26,0.22);
+    white-space: pre;
+    pointer-events: none;
+  }
+
+  /* center divider line */
+  .divider {
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 50%;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, rgba(245,239,224,0.3) 30%, rgba(245,239,224,0.3) 70%, transparent);
+    z-index: 50;
+  }
+
+  /* ── TEXT CONTENT ── */
+  .side-content {
+    position: relative;
+    z-index: 10;
+  }
+
+  .role-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(64px, 7vw, 96px);
+    line-height: 1;
+    letter-spacing: 2px;
+    color: var(--cream);
+    margin-bottom: 10px;
+  }
+
+  .role-accent {
+    display: block;
+    width: 36px;
+    height: 2px;
+    background: var(--orange);
+    margin-bottom: 18px;
+  }
+
+  .role-desc {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.6;
+    color: rgba(245,239,224,0.65);
+    max-width: 220px;
+  }
+
+  .side-right .role-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(46px, 5.5vw, 76px);
+    color: var(--cream);
+  }
+
+  /* ── PHOTO OVERLAY AREA ── */
+  .photo-zone {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 45%;
+    height: 88%;
+    z-index: 30;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .photo-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(232,99,26,0.08) 40%,
+      transparent 100%
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    color: rgba(245,239,224,0.2);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border-left: 1px dashed rgba(232,99,26,0.2);
+    border-right: 1px dashed rgba(232,99,26,0.2);
+  }
+
+  /* ── SKILLS TAGS ── */
+  .skills-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    z-index: 60;
+    background: rgba(0,0,0,0.8);
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding: 14px 48px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    overflow: hidden;
+  }
+
+  .skills-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: rgba(245,239,224,0.3);
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-right: 8px;
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 14px;
+    border-radius: 100px;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    font-family: 'JetBrains Mono', monospace;
+    border: 1px solid rgba(232,99,26,0.3);
+    color: rgba(232,99,26,0.85);
+    background: rgba(232,99,26,0.05);
+    transition: all 0.2s;
+  }
+  .tag:hover {
+    background: rgba(232,99,26,0.15);
+    border-color: rgba(232,99,26,0.7);
+    color: var(--orange);
+  }
+  .tag.design {
+    border-color: rgba(29,95,160,0.4);
+    color: rgba(100,170,240,0.85);
+    background: rgba(29,95,160,0.06);
+  }
+  .tag.design:hover {
+    background: rgba(29,95,160,0.15);
+    border-color: rgba(100,170,240,0.7);
+    color: #64AAF0;
+  }
+
+  /* ── ABOUT CARD (hidden, shown on scroll) ── */
+  .about-section {
+    background: #0a0a0a;
+    padding: 80px 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 32px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .info-card {
+    padding: 28px;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.02);
+  }
+  .info-card h3 {
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 14px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .info-card p {
+    font-size: 14px;
+    color: rgba(245,239,224,0.6);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+  .info-card strong {
+    color: var(--cream);
+    font-weight: 400;
+  }
+
+  .stat-row {
+    display: flex;
+    gap: 24px;
+    margin-top: 24px;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    color: var(--cream);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: rgba(245,239,224,0.4);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .side-left .side-content  { animation: fadeUp 0.9s 0.3s both; }
+  .side-right .side-content { animation: fadeUp 0.9s 0.5s both; }
+  .skills-bar               { animation: fadeUp 0.7s 0.7s both; }
+
+  @keyframes scroll-tags {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .tags-inner {
+    display: flex;
+    gap: 12px;
+    animation: scroll-tags 28s linear infinite;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">O<span>.</span>EN-NAJI</div>
+  <ul>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Projects</a></li>
+    <li><a href="#">Design</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+  <div class="nav-socials">
+    <a href="#">LI</a>
+    <a href="#">GH</a>
+    <a href="#">BE</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+
+  <!-- LEFT: Designer -->
+  <div class="side-left">
+    <div class="art-bg"></div>
+    <div class="paint-strokes">
+      <div class="stroke s1"></div>
+      <div class="stroke s2"></div>
+      <div class="stroke s3"></div>
+      <div class="stroke s4"></div>
+      <div class="stroke s5"></div>
+    </div>
+    <div class="side-content">
+      <div class="role-title">designer</div>
+      <span class="role-accent"></span>
+      <p class="role-desc">Creative Designer &amp; Freelancer<br>Illustrator · Photoshop<br>Print Business (Stickers, T-shirts, Cartes de visite)</p>
+    </div>
+  </div>
+
+  <!-- RIGHT: Developer -->
+  <div class="side-right">
+    <div class="code-bg"></div>
+    <div class="code-rain">
+<pre>import os
+import sys
+from datetime import datetime
+
+def main():
+    user = input("Enter your name: ")
+    now = datetime.now()
+    print(f"Hello, {user}!")
+    print(f"Current time: {now}")
+
+if __name__ == "__main__":
+    main()
+
+
+class Server:
+    def __init__(self, host, port):
+        self.host = host
+        self.port = port
+        self.connected = False
+
+    def connect(self):
+        try:
+            self.connected = True
+            print(f"Connected to
+{self.host}:{self.port}")
+        except Exception as e:
+            print(f"Connection failed: {e}")
+
+    def get_data(self):
+        if self.connected:
+            return "Server data"
+        return None
+
+
+-- DHCP config --
+subnet 192.168.1.0 netmask
+255.255.255.0 {
+  range 192.168.1.10
+        192.168.1.100;
+  option routers 192.168.1.1;
+  option domain-name-servers
+        8.8.8.8, 8.8.4.4;
+}
+</pre>
+    </div>
+    <div class="side-content">
+      <div class="role-title">developer</div>
+      <span class="role-accent"></span>
+      <p class="role-desc">Digital Infrastructure Student &amp; Full-Stack Dev<br>Python · C · SQL · Linux · Servers<br>Networks: DHCP, DNS, Routing &amp; more</p>
+    </div>
+  </div>
+
+  <!-- CENTER DIVIDER -->
+  <div class="divider"></div>
+
+  <!-- PHOTO ZONE (replace src with your actual photo) -->
+  <div class="photo-zone">
+    <div class="photo-placeholder">← your photo here →</div>
+  </div>
+
+</section>
+
+<!-- SKILLS BAR -->
+<div class="skills-bar">
+  <span class="skills-label">Stack</span>
+  <div style="overflow: hidden; flex: 1;">
+    <div class="tags-inner">
+      <span class="tag">Python</span>
+      <span class="tag">C</span>
+      <span class="tag">SQL</span>
+      <span class="tag">HTML/CSS</span>
+      <span class="tag">Linux</span>
+      <span class="tag">Windows Server</span>
+      <span class="tag">DHCP / DNS</span>
+      <span class="tag">Réseaux</span>
+      <span class="tag design">Illustrator</span>
+      <span class="tag design">Photoshop</span>
+      <span class="tag design">Print Business</span>
+      <span class="tag design">Freelance</span>
+      <!-- duplicate for seamless loop -->
+      <span class="tag">Python</span>
+      <span class="tag">C</span>
+      <span class="tag">SQL</span>
+      <span class="tag">HTML/CSS</span>
+      <span class="tag">Linux</span>
+      <span class="tag">Windows Server</span>
+      <span class="tag">DHCP / DNS</span>
+      <span class="tag">Réseaux</span>
+      <span class="tag design">Illustrator</span>
+      <span class="tag design">Photoshop</span>
+      <span class="tag design">Print Business</span>
+      <span class="tag design">Freelance</span>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT / INFO SECTION -->
+<section class="about-section">
+
+  <div class="info-card">
+    <h3>Identité</h3>
+    <p>
+      <strong>Oussama En-Naji</strong><br>
+      24 ans · Salé, Maroc<br>
+      Né le <strong>29.09.2001</strong>
+    </p>
+    <div class="stat-row">
+      <div class="stat">
+        <div class="stat-num">24</div>
+        <div class="stat-label">Ans</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">2+</div>
+        <div class="stat-label">Années exp.</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Passion</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <h3>Formation</h3>
+    <p>
+      Étudiant en <strong>Infrastructure Digitale</strong> à l'OFPPT.<br><br>
+      Systèmes · Réseaux · Servers<br>
+      Linux · Windows Server<br>
+      DHCP · DNS · Routage
+    </p>
+  </div>
+
+  <div class="info-card">
+    <h3>Langues</h3>
+    <p>
+      <strong>Anglais</strong> — Courant ✓<br>
+      <strong>Français</strong> — Intermédiaire<br>
+      <strong>Arabe</strong> — Langue maternelle<br>
+      <strong>Darija</strong> — Natif
+    </p>
+  </div>
+
+</section>
+
+</body>
+</html>
